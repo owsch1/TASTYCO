@@ -123,7 +123,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             verbose_name='Активен'
             )
 
-    created_at = models.DateTimeField(
+    date_joined = models.DateTimeField(
             default=timezone.now, 
             verbose_name='Дата регистрации'
             )

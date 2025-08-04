@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block title %}TastyCo Menü{% endblock %}
+
+{% block content %}
+<section class="ftco-section">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-4 text-center ftco-animate">
+        <div class="menu-wrap">
+          <a href="#" class="menu-img img mb-4" style="background-image: url('{% static "catalog/images/pizza-1.jpg" %}');"></a>
+          <div class="text">
+            <h3><a href="#">Italienische Pizza</a></h3>
+            <p>Tomatensauce, Mozzarella, Basilikum</p>
+            <p class="price"><span>CHF 14.50</span></p>
+            <p><a href="#" class="btn btn-primary btn-outline-primary">Zum Warenkorb</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 text-center ftco-animate">
+        <div class="menu-wrap">
+          <a href="#" class="menu-img img mb-4" style="background-image: url('{% static "pizza/images/pizza-2.jpg" %}');"></a>
+          <div class="text">
+            <h3><a href="#">Scharfe Salami Pizza</a></h3>
+            <p>Tomaten, Mozzarella, scharfe Salami</p>
+            <p class="price"><span>CHF 15.90</span></p>
+            <p><a href="#" class="btn btn-primary btn-outline-primary">Zum Warenkorb</a></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
