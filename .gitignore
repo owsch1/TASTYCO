@@ -1,0 +1,43 @@
+@"
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.sqlite3
+
+# Env files
+.env
+venv/
+env/
+ENV/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Static files and media (если хранишь отдельно)
+staticfiles/
+media/
+
+# Pytest cache
+.pytest_cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# Migrations (если хочешь, чтобы не попадали в репозиторий, но обычно миграции лучше включать)
+*/migrations/*.pyc
+*/migrations/__pycache__/
+
+# Pipenv files
+Pipfile.lock
+"@ > .gitignore
