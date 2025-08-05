@@ -131,3 +131,15 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user.CustomUser'
+
+
+DEFAULT_FROM_EMAIL = 'esen.belov@mail.ru'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'esen.belov@mail.ru'
+EMAIL_HOST_PASSWORD = '9gb2q2FTV6CPQwouP7Pr'
+
+
+LOGIN_URL = '/user/login/'
