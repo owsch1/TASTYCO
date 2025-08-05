@@ -4,35 +4,50 @@
 {% block title %}TastyCo Menü{% endblock %}
 
 {% block content %}
-<section class="ftco-section">
-  <div class="container">
-    <div class="row">
-
-      <div class="col-md-4 text-center ftco-animate">
-        <div class="menu-wrap">
-          <a href="#" class="menu-img img mb-4" style="background-image: url('{% static "catalog/images/pizza-1.jpg" %}');"></a>
-          <div class="text">
-            <h3><a href="#">Italienische Pizza</a></h3>
-            <p>Tomatensauce, Mozzarella, Basilikum</p>
-            <p class="price"><span>CHF 14.50</span></p>
-            <p><a href="#" class="btn btn-primary btn-outline-primary">Zum Warenkorb</a></p>
-          </div>
+<section class="ftco-menu">
+    <div class="container-fluid">
+        <div class="row d-md-flex">
+            <div class="col-lg-4 ftco-animate img f-menu-img mb-5 mb-md-0" style="background-image: url(images/about.jpg);">
+            </div>
+            <div class="col-lg-8 ftco-animate p-md-5">
+                <div class="row">
+                    <div class="col-md-12 nav-link-wrap mb-5">
+                        <div class="nav ftco-animate nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Tasty</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div class="col-md-4 text-center ftco-animate">
-        <div class="menu-wrap">
-          <a href="#" class="menu-img img mb-4" style="background-image: url('{% static "pizza/images/pizza-2.jpg" %}');"></a>
-          <div class="text">
-            <h3><a href="#">Scharfe Salami Pizza</a></h3>
-            <p>Tomaten, Mozzarella, scharfe Salami</p>
-            <p class="price"><span>CHF 15.90</span></p>
-            <p><a href="#" class="btn btn-primary btn-outline-primary">Zum Warenkorb</a></p>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
+</section>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-4 text-center ftco-animate">
+                <div class="menu-wrap">
+                    <a href="#" class="menu-img img mb-4" style="background-image: url(
+                        {% if product.productimage_set.first %}
+                            {{ product.productimage_set.first.image.url }}
+                        {% else %}
+                            {% static "catalog/images/default-product.jpg" %}
+                        {% endif %}
+                    );"></a>
+                    <div class="text">
+                        <h3><a href="#">{{ product.name }}</a></h3>
+                        <p>{{ product.description|default:"Описание отсутствует" }}</p>
+                        <p class="price"><span>{{ product.price }} сом</span></p>
+                        <p><a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-outline-primary">Подробнее</a></p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>Продукты не найдены.</p>
+            {% endfor %}
+        </div>
+    </div>
 </section>
 {% endblock %}
+
