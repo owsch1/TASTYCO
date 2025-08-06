@@ -1,28 +1,43 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Product, Category
-
+from django.db.models import Q  # ✅ korrekt importiert
 
 def index_view(request):
     products = Product.objects.all()
+    categories = Category.objects.filter(parent=None)  # Nur Hauptkategorien
     return render(
-            request,
-            'catalog/index.html',
-            context={'products':products},
-        )
+        request,
+        'catalog/index.html',
+        context={
+            'products': products,
+            'categories': categories,
+        },
+    )
 
 def product_detail_view(request, product_id):
-    product = Product.objects.get(pk=product_id)
+    product = get_object_or_404(Product, pk=product_id)
     return render(
-            request,
-            'catalog/product_detail.html',
-            context={'product':product},
-        )
+        request,
+        'catalog/product_detail.html',
+        context={'product': product},
+    )
 
-def category_view(request):
-    categories = Category.objects.filter(parent=None)
+def category_view(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+
+    # Alle Unterkategorien dieser Kategorie ermitteln
+    subcategories = category.children.all()
+
+    # ✅ models.Q(...) → Q(...)
+    products = Product.objects.filter(
+        Q(category=category) | Q(category__in=subcategories)
+    )
+
     return render(
         request,
         'catalog/category.html',
-        context={'categories': categories},
+        context={
+            'category': category,
+            'products': products,
+        },
     )
-

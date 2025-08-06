@@ -1,95 +1,121 @@
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Категории – TastyCo{% endblock %}
+{% block title %}TastyCo Menü{% endblock %}
 
 {% block content %}
-<!-- Header-Bereich -->
+<!-- Header -->
 <section class="img" style="
     background-image: url({% static 'images/bg_3.jpg' %});
     height: 4cm;
     display: flex;
     align-items: center;
-    justify-content: center;
+    margin: 0;
+    padding: 0;
     position: relative;
 ">
-  <div class="container">
-    <div class="row justify-content-center align-items-center">
-      <div class="col-md-12 text-center ftco-animate p-0 m-0">
-        <h1 class="mb-1 bread text-white">Наше меню</h1>
-        <p class="breadcrumbs mb-0 text-white">
-          <span><a href="/" class="text-white">Главная</a></span> <span class="text-white">Категории</span>
+  <div class="container" style="z-index: 2;">
+    <div class="row align-items-center">
+
+
+      <!-- Text-Zentrum -->
+      <div class="col text-center">
+        <h1 class="mb-1 bread" style="font-size: 24px; color: white;">{{ category.name }}</h1>
+        <p class="breadcrumbs mb-0" style="font-size: 13px; color: white;">
+          <span class="mr-2"><a href="/" style="color: white;">Home</a></span>
+          <span style="color: white;">{{ category.name }}</span>
         </p>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- Kategorie-Tabs -->
-<div class="container-fluid py-4">
-  <div class="row">
-    <div class="col-12 text-center">
-      <div class="nav nav-pills justify-content-center mb-4" id="v-pills-tab" role="tablist">
-        {% for category in categories %}
-          <a class="nav-link {% if forloop.first %}active{% endif %}"
-             id="v-pills-{{ category.id }}-tab"
-             data-toggle="pill"
-             href="#v-pills-{{ category.id }}"
-             role="tab"
-             aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
-            {{ category.name }}
-          </a>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
 
-  <div class="row justify-content-center">
-    <div class="col-md-10">
-      <div class="tab-content" id="v-pills-tabContent">
-        {% for category in categories %}
-          <div class="tab-pane fade {% if forloop.first %}show active{% endif %}"
-               id="v-pills-{{ category.id }}"
-               role="tabpanel">
-            <div class="row">
-              {% for product in category.product_set.all %}
-                <div class="col-md-4 mb-4">
-                  <div class="menu-wrap text-center">
+<!-- Produkte -->
+<div class="container-fluid py-5 px-4">
+  {% if products %}
+    <div class="row g-1 justify-content-center">
+      {% for product in products %}
+        <div class="d-flex align-items-stretch" style="width: 26%; min-width: 320px; max-width: 340px; margin: 0 auto;">
 
-                    <!-- DEBUG-Anzeige: Bild-URL -->
-                    <p style="color: green; font-size: 12px;">
-                      Bild-URL: {{ product.productimage_set.first.image.url }}
-                    </p>
+          <div class="p-3 w-100 d-flex rounded"
+               style="background-color: #1a1a1a; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.5); min-height: 340px; max-height: 480px;">
 
-                    <!-- Bildanzeige -->
-                    {% with product.productimage_set.first as image %}
-                      {% if image %}
-                        <img src="{{ image.image.url }}"
-                             alt="{{ product.name }}"
-                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
-                      {% else %}
-                        <img src="{% static 'images/placeholder.jpg' %}"
-                             alt="Kein Bild"
-                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
-                      {% endif %}
-                    {% endwith %}
-
-                    <!-- Produktinfos -->
-                    <div class="text mt-3">
-                      <h3><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
-                      <p>{{ product.description|truncatewords:15 }}</p>
-                      <p class="price"><span>${{ product.price }}</span></p>
-                      <p><a href="#" class="btn btn-white btn-outline-white">В корзину</a></p>
-                    </div>
-                  </div>
-                </div>
-              {% empty %}
-                <p class="text-muted text-center">Нет продуктов в категории "{{ category.name }}".</p>
-              {% endfor %}
+            <!-- Bild -->
+            <div style="flex: 1.6;">
+              {% if product.productimage_set.first %}
+                <img src="{{ product.productimage_set.first.image.url }}"
+                     alt="{{ product.name }}"
+                     class="img-fluid rounded"
+                     style="height: 100%; width: 100%; object-fit: cover;">
+              {% else %}
+                <img src="{% static 'catalog/images/default-product.jpg' %}"
+                     alt="Kein Bild"
+                     class="img-fluid rounded"
+                     style="height: 100%; width: 100%; object-fit: cover;">
+              {% endif %}
             </div>
+
+            <!-- Textblock -->
+            <div class="text-white ps-3 d-flex flex-column justify-content-between align-items-center text-center" style="flex: 1;">
+              <div class="w-100">
+                <h6 class="mb-2" style="font-weight: 600;">{{ product.name }}</h6>
+                <p class="mb-2" style="font-size: 13px; color: #aaa;">{{ product.description|default:"Описание отсутствует"|truncatewords:12 }}</p>
+                <p class="mb-3" style="color: #fbb034; font-weight: bold;">{{ product.price }} сом</p>
+              </div>
+
+              <div class="w-100 d-flex flex-column align-items-center">
+                <a href="{% url 'product_detail' product.id %}"
+                   class="btn btn-sm btn-outline-light mb-2"
+                   style="width: 85%; font-size: 14px; padding: 2px 4px;">
+                  Подробнее
+                </a>
+
+                <form method="post" action="{% url 'cart_add' product.id %}" style="width: 85%;">
+                  {% csrf_token %}
+                  <button type="submit"
+                          class="btn btn-sm btn-outline-light w-100"
+                          style="font-size: 14px; padding: 2px 4px;">
+                    Добавить в 🛒
+                  </button>
+                </form>
+              </div>
+            </div>
+
           </div>
-        {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="row justify-content-center mt-4">
+      <div class="col-auto">
+        <nav>
+          <ul class="pagination">
+            {% if page_obj.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹</a></li>
+            {% endif %}
+            {% for num in paginator.page_range %}
+              {% if page_obj.number == num %}
+                <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+              {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">›</a></li>
+            {% endif %}
+          </ul>
+        </nav>
       </div>
     </div>
-  </div>
+    {% endif %}
+  {% else %}
+    <div class="text-center text-white">
+      <h4>В этой категории пока нет продуктов.</h4>
+    </div>
+  {% endif %}
 </div>
 {% endblock %}
