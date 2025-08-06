@@ -14,8 +14,15 @@
             </li>
         {% endfor %}
     </ul>
-
-    <a href="{% url 'order_list' %}" class="btn btn-secondary mt-4">← Назад к заказам</a>
+    {% if not order.is_paid %}
+    <a href="{% url 'payment' order.id %}" class="btn btn-success mt-3">💳 Оплатить заказ</a>
+{% endif %}
+    {% if user.is_staff or user.is_superuser %}
+     <a href="{% url 'admin_order_list' %}" class="btn btn-secondary mt-4">
+    {% else %}
+    <a href="{% url 'order_list' %}" class="btn btn-secondary mt-4">
+    {% endif %}
+         ← Назад к заказам</a>
 </div>
 {% endblock %}
 

@@ -35,6 +35,11 @@ class Order(models.Model):
             verbose_name='Статус заказа'
             )
 
+    is_paid = models.BooleanField(
+            default=False,
+            verbose_name='Оплачен'
+            )
+
     total_price = models.DecimalField(
             max_digits=10,
             decimal_places=2,
