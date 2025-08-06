@@ -1,12 +1,5 @@
 from django.db import models
-
-
-UNIT_CHOICES = [
-    ('kg', 'Килограмм'),
-    ('g', 'Грамм'),
-    ('l', 'Литр'),
-    ('pcs', 'Штука'),
-]
+from common.choices import UNIT_CHOICES 
 
 
 class Category(models.Model):
