@@ -4,51 +4,104 @@
 {% block title %}TastyCo Menü{% endblock %}
 
 {% block content %}
+
+<!-- Kategorie-Buttons -->
 <section class="ftco-menu">
+    <div class="container">
+        <div class="d-flex justify-content-center flex-wrap py-4" style="gap: 1rem;">
+            {% for category in categories %}
+                <a href="{% url 'category' category.id %}"
+                   class="btn btn-warning px-4 py-2">
+                    {{ category.name }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Optionaler Bereich -->
     <div class="container-fluid">
         <div class="row d-md-flex">
-            <div class="col-lg-4 ftco-animate img f-menu-img mb-5 mb-md-0" style="background-image: url(images/about.jpg);">
+            <div class="col-lg-4 ftco-animate img f-menu-img mb-5 mb-md-0"
+                 style="background-image: url({% static 'images/about.jpg' %});">
             </div>
             <div class="col-lg-8 ftco-animate p-md-5">
-                <div class="row">
-                    <div class="col-md-12 nav-link-wrap mb-5">
-                        <div class="nav ftco-animate nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Tasty</a>
-                        </div>
-                    </div>
-                </div>
+                <!-- Optionaler Text -->
             </div>
         </div>
     </div>
 </section>
 
+<!-- Produktübersicht (5 pro Zeile) -->
 <section class="ftco-section">
     <div class="container">
-        <div class="row">
+           <div class="row" style="gap: 80px;">
             {% for product in products %}
-            <div class="col-md-4 text-center ftco-animate">
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-5 text-center ftco-animate p-2">
                 <div class="menu-wrap">
-                    <a href="#" class="menu-img img mb-4" style="background-image: url(
-                        {% if product.productimage_set.first %}
-                            {{ product.productimage_set.first.image.url }}
-                        {% else %}
-                            {% static "catalog/images/default-product.jpg" %}
-                        {% endif %}
-                    );"></a>
+                    <a href="{% url 'product_detail' product.id %}" class="menu-img img mb-3"
+                       style="background-image: url(
+                           {% if product.productimage_set.first %}
+                               {{ product.productimage_set.first.image.url }}
+                           {% else %}
+                               {% static 'catalog/images/default-product.jpg' %}
+                           {% endif %}
+                       );
+                       background-size: cover; background-position: center; height: 200px; display: block;">
+                    </a>
                     <div class="text">
-                        <h3><a href="#">{{ product.name }}</a></h3>
-                        <p>{{ product.description|default:"Описание отсутствует" }}</p>
-                        <p class="price"><span>{{ product.price }} сом</span></p>
-                        <p><a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-outline-primary">Подробнее</a></p>
-                        <p><a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-outline-primary">Добавить в корзину</a></p>
+                        <h6><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h6>
+                        <p class="mb-1" style="font-size: 14px;">{{ product.description|truncatewords:10 }}</p>
+                        <p class="price"><strong>{{ product.price }} сом</strong></p>
+                        <p>
+                            <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-outline-light">Подробнее</a>
+                        </p>
+                        <p>
+                            <form method="post" action="{% url 'cart_add' product.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-light">Добавить в корзину</button>
+                            </form>
+                        </p>
                     </div>
                 </div>
             </div>
             {% empty %}
-            <p>Продукты не найдены.</p>
+            <div class="col-12 text-center">
+                <p>Продукты не найдены.</p>
+            </div>
             {% endfor %}
         </div>
+
+        <!-- Seitenumbruch -->
+        {% if is_paginated %}
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">‹</a>
+                        </li>
+                        {% endif %}
+
+                        {% for num in paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">›</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </section>
-{% endblock %}
 
+{% endblock %}
