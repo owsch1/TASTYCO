@@ -11,7 +11,7 @@ from .models import (
 @admin.register(CustomUser)
 class CustomUserAdmin(BaseUserAdmin):
     model = CustomUser
-    list_display = ('id', 'email', 'firstname', 'lastname', 'phone', 'is_verified', 'is_staff', 'is_active')
+    list_display = ('id', 'email', 'firstname', 'lastname', 'phone', 'role', 'is_verified', 'is_staff', 'is_active')
     list_filter = ('is_verified', 'is_staff', 'is_active')
     search_fields = ('email', 'phone')
     ordering = ('id',)

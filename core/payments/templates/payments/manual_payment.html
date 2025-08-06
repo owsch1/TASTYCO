@@ -1,0 +1,25 @@
+<!-- payments/manual_payment.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2>Оплата заказа №{{ order.id }}</h2>
+    <p>Пожалуйста, переведите сумму на один из следующих номеров:</p>
+
+    <ul class="list-group mb-4">
+        <li class="list-group-item">MBank: <strong>0500 123 456</strong></li>
+        <li class="list-group-item">О!Банк: <strong>0700 789 012</strong></li>
+    </ul>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="method">Метод оплаты:</label>
+        <select name="method" id="method" class="form-select mb-3" disabled>
+            <option value="{{ payment.method }}">{{ payment.get_method_display }}</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Я оплатил</button>
+        <a href="{% url 'order_detail' order.id %}" class="btn btn-outline-secondary ms-2">Назад</a>
+    </form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">📦 Админ-панель заказов</h2>
+
+    <!-- Выбор пользователя -->
+    <form method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <select name="user" class="form-select" onchange="this.form.submit()">
+                    <option value="">-- Выберите пользователя --</option>
+                    {% for user in users %}
+                        <option value="{{ user.id }}" {% if user.id|stringformat:"s" == selected_user_id %}selected{% endif %}>
+                            {{ user.username }} ({{ user.email }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </form>
+
+    {% if orders %}
+        <div class="card">
+            <div class="card-header">
+                Заказы пользователя: <strong>{{ user.email }}</strong>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for order in orders %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Заказ №{{ order.id }}</strong><br>
+                            <small>{{ order.created_at|date:"d.m.Y H:i" }}</small>
+                        </div>
+                        <div class="text-end">
+                            {% if order.is_paid %}
+                                <span class="badge bg-success">✅ Оплачен</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">⏳ В ожидании</span>
+                            {% endif %}
+                            <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary ms-3">Подробнее</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% elif selected_user_id %}
+        <div class="alert alert-info">У выбранного пользователя нет заказов.</div>
+    {% endif %}
+</div>
+{% endblock %}
+
