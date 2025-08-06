@@ -53,3 +53,4 @@ def cart_clear(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
     cart.items.all().delete()
     return redirect('cart')
+
