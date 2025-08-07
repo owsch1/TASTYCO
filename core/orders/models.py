@@ -1,16 +1,10 @@
 from django.db import models
 from django.conf import settings
 from catalog.models import Product
+from common.choices import STATUS_CHOICES
 
 
 class Order(models.Model):
-    STATUS_CHOICES = [
-        ('pending', 'В ожидании'),
-        ('processing', 'В обработке'),
-        ('completed', 'Завершен'),
-        ('cancelled', 'Отменен'),
-        ]
-
     user = models.ForeignKey(
             settings.AUTH_USER_MODEL,
             on_delete=models.CASCADE,

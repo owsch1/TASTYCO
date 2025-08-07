@@ -1,16 +1,10 @@
 from django.db import models
 from django.conf import settings
 from orders.models import Order
+from common.choices import PAYMENT_STATUS_CHOICES
 
 
 class Transaction(models.Model):
-    PAYMENT_STATUS_CHOICES = [
-        ('pending', 'Ожидается'),
-        ('success', 'Успешно'),
-        ('failed', 'Неудача'),
-        ('refunded', 'Возврат'),
-    ]
-
     user = models.ForeignKey(
             settings.AUTH_USER_MODEL,
             on_delete=models.CASCADE,
