@@ -4,6 +4,27 @@
  * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+.category-button {
+    background-color: transparent;
+    color: #f2c94c; /* gold */
+    border: 2px solid #f2c94c;
+    padding: 8px 16px;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-transform: none;
+}
+
+.category-button:hover {
+    background-color: #f2c94c;
+    color: black;
+    text-decoration: none;
+}
+
+.category-button.active {
+    background-color: #f2c94c;
+    color: black;
+}
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
