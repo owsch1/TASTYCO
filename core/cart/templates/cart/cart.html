@@ -2,42 +2,69 @@
 {% load static %}
 
 {% block content %}
+<style>
+    .gold-text {
+        color: gold !important;
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+</style>
+
 <div class="container mt-4">
     <h2 class="mb-4">Ваша корзина</h2>
 
     {% if cart.items.exists %}
-        <table class="table table-bordered">
-            <thead>
+        <table class="table table-bordered text-center align-middle">
+            <thead style="color: gold; text-shadow: 0 0 5px rgba(255,215,0,0.5); text-align: center;">
                 <tr>
                     <th>Товар</th>
                     <th>Количество</th>
                     <th>Цена за штуку</th>
                     <th>Сумма</th>
+                    <th>Управление</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in cart.items.all %}
                 <tr>
-                    <td>{{ item.product.name }}</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>{{ item.product.price }} сом</td>
-                    <td>{{ item.total_price }} сом</td>
+                    <td class="gold-text">{{ item.product.name }}</td>
+                    <td>
+                        <div class="d-flex justify-content-center align-items-center" style="gap: 50px;">
+                            <span class="gold-text">{{ item.quantity }}</span>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{% url 'cart_subtract' item.product.id %}" class="btn btn-outline-secondary">➖</a>
+                                <a href="{% url 'cart_add' item.product.id %}" class="btn btn-outline-secondary">➕</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="gold-text">{{ item.product.price }} сом</td>
+                    <td class="gold-text">{{ item.total_price }} сом</td>
+                    <td>
+                        <div class="d-flex justify-content-center align-items-center gap-2">
+                            <!-- Optional: Produkt löschen -->
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
 
-        <div class="text-end mt-3">
-            <h5><strong>Итого: {{ cart.get_total_price }} сом</strong></h5>
+        <div class="d-flex justify-content-start align-items-center mt-4">
+            <h5 class="me-auto gold-text"><strong>Итого: {{ cart.get_total_price }} сом</strong></h5>
         </div>
-        {% if cart.items.all %}
-    <a href="{% url 'checkout' %}" class="btn btn-success mt-3">
-        ✅ Оформить заказ
-    </a>
-    {% endif %}
+
+        <!-- Buttons: Checkout & Clear -->
+        <div class="d-flex mt-3" style="gap: 60px;">
+            <a href="{% url 'checkout' %}" class="btn btn-success">
+                ✅ Оформить заказ
+            </a>
+
+            <form method="post" action="{% url 'cart_clear' %}" onsubmit="return confirm('Вы уверены, что хотите очистить корзину?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">🗑️ Очистить корзину</button>
+            </form>
+        </div>
     {% else %}
-        <p>Ваша корзина пуста.</p>
+        <p class="gold-text">Ваша корзина пуста.</p>
     {% endif %}
 </div>
 {% endblock %}
-

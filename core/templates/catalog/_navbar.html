@@ -10,32 +10,44 @@
 
         <!-- Allgemeine Links -->
         <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Главный</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#menu">Каталог</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Наша Команда</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'index' %}#product-section">Каталог</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">Наша Команда</a></li>
 
-        <!-- Wenn Benutzer eingeloggt ist -->
         {% if request.user.is_authenticated %}
+          <!-- Benutzername -->
           <li class="nav-item">
             <a class="nav-link disabled" href="#">
               👤 {{ request.user.firstname }}{% if request.user.role == "admin" %} (Admin){% endif %}
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Выход</a>
-          </li>
-          <!-- 🛒 Goldener Warenkorb-Link -->
+
+          <!-- Заказы-Link: je nach Rolle -->
+          {% if request.user.is_staff or request.user.is_superuser %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'admin_order_list' %}">📋 Все заказы</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'order_list' %}">📋 Мои заказы</a>
+            </li>
+          {% endif %}
+
+          <!-- Warenkorb -->
           <li class="nav-item">
             <a class="nav-link" href="{% url 'cart' %}" style="color: gold; font-weight: bold;">
               🛒 Корзинка
             </a>
           </li>
+
+          <!-- Logout -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Выход</a>
+          </li>
+
         {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Вход</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
-          </li>
+          <!-- Login / Registrierung -->
+          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Вход</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Регистрация</a></li>
         {% endif %}
 
       </ul>
