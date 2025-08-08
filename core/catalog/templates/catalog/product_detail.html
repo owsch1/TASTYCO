@@ -4,7 +4,6 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
-<!-- Header-Bereich -->
 <section class="img" style="
     background-image: url({% static 'images/bg_3.jpg' %});
     height: 4cm;
@@ -28,7 +27,6 @@
   </div>
 </section>
 
-<!-- Produktanzeige -->
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-md-10 p-4 rounded d-flex flex-wrap align-items-center"
@@ -52,11 +50,16 @@
         <h2 class="mb-3">{{ product.name }}</h2>
         <p class="mb-3">{{ product.description }}</p>
         <ul class="list-unstyled mb-3">
-          <li><strong>Preis:</strong> <span class="text-warning">${{ product.price }}</span></li>
-          <li><strong>Zutaten:</strong> {{ product.ingredients }}</li>
-          <li><strong>Allergene:</strong> Gluten, Milch</li>
+          <li><strong>Цена:</strong> <span class="text-warning">сом {{ product.price }}</span></li>
+          <li><strong>Ингредиенты:</strong> {{ product.ingredients }}</li>
+          <li><strong>Аллергены:</strong> </li>
         </ul>
-        <a href="#" class="btn btn-white btn-outline-white">Jetzt bestellen</a>
+
+        {# Кнопка «Заказать сейчас» -> POST в cart_add и затем редирект на корзину #}
+        <form method="post" action="{% url 'cart_add' product.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-white btn-outline-white">Заказать сейчас</button>
+        </form>
       </div>
 
     </div>
