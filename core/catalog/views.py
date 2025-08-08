@@ -16,7 +16,7 @@ def index_view(request):
         request,
         'catalog/index.html',
         context={
-            'products': page_obj,  # ⬅️ paginierte Produkte
+            'products': page_obj,
             'categories': categories,
             'is_paginated': page_obj.has_other_pages(),
             'page_obj': page_obj,
@@ -52,10 +52,4 @@ def category_view(request, category_id):
 def about_view(request):
     return render(request, 'catalog/about.html')
 
-def product_detail_view(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    return render(
-        request,
-        'catalog/product_detail.html',
-        context={'product': product},
-    )
+
